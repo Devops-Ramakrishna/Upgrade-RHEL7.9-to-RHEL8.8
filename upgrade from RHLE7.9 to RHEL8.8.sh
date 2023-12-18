@@ -31,6 +31,13 @@ fi # fi means reverse of fi, it indicating condition end
 
 # pre-checks of BMHOST
 
+# use absolute, because resolv.conf exists there
+
+cp /root/Upgrade-RHEL7.9-to-RHEL8.8/resolv.conf /etc/resolv.conf &>> $LOGFILE
+
+VALIDATE $? "Copying resolv conf file"
+
+
 UPDATE=$(yum update)
 
 if [ $VERSION -ne 0 ]
