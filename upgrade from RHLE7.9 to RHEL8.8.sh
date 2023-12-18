@@ -33,12 +33,24 @@ fi # fi means reverse of fi, it indicating condition end
 
 # use absolute, because resolv.conf exists there
 
-cp /root/Upgrade-RHEL7.9-to-RHEL8.8/resolv.conf /etc/resolv.conf &>> $LOGFILE
+# Define the string to be searched
+search_string="nameserver 8.8.8.8
+nameserver 8.8.4.4"
 
-VALIDATE $? "Copying resolv conf file"
+# Define the file path
+file_path="/etc/resolv.conf"
+
+# Check if the string is present in the file
+if ! grep -qF "$search_string" "$file_path"; then
+    # If the string is not present, add it to the file
+    echo -e "$search_string" >> "$file_path"
+    echo "String added to the file"
+else
+    echo "String already present in the file"
+fi
 
 
-UPDATE=$(yum update)
+UPDATE=$(yum update -y)
 
 if [ $VERSION -ne 0 ]
 then
