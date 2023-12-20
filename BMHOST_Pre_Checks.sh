@@ -29,7 +29,7 @@ else
     echo " you are root user "
 fi # fi means reverse of fi, it indicating condition end
 
-# pre-checks of BMHOST
+############# pre-checks of BMHOST ##################################################
 
 # use absolute, because resolv.conf exists there
 
@@ -47,4 +47,13 @@ if ! grep -qF "$search_string" "$file_path"; then
     echo "String added to the file"
 else
     echo "String already present in the file"
+fi
+
+# Check if the string is present in the file
+if ! grep -q "hosts: files myhostname" /etc/nsswitch.conf; then
+    # If the string is not present, add it to the file
+    echo "hosts: files myhostname" >> /etc/nsswitch.conf
+else
+    sed -i '/hosts:      files myhostname/s/$/ dns/'
+    echo " Added the word in configuration file "
 fi
